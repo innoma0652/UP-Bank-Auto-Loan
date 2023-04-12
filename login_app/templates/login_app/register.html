@@ -1,0 +1,76 @@
+{% extends 'navbar/navbar.html' %}
+{% block content %} {% load static %}
+
+
+<div class="container">
+
+  <div class="card o-hidden border-0 shadow-lg my-5">
+      <div class="card-body p-0">
+          <!-- Nested Row within Card Body -->
+          <div class="row">
+              <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+              <div class="col-lg-7">
+                  <div class="p-5">
+                      <div class="text-center">
+                          <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                      </div>
+                      <form class="user" action="" method="post">
+                        {% csrf_token %}
+                          <div class="form-group row">
+                              <div class="col-sm-6 mb-3 mb-sm-0" id="first_name">
+                                      {{form.first_name}}
+                              </div>
+                              <div class="col-sm-6" id="last_name">
+                                      {{form.last_name}}
+                              </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-6 mb-3 mb-sm-0" id="username">
+                                      {{form.username}}
+                            </div>
+                            <div class="col-sm-6" id="email">
+                                     {{form.email}}
+                            </div>
+                          </div>
+                         
+                          <div class="form-group row">
+                              <div class="col-sm-6 mb-3 mb-sm-0" id="password1">
+                                  {{form.password1}}
+                              </div>
+                              <div class="col-sm-6" id="password2">
+                                  {{form.password2}}
+                              </div>
+                          </div>
+                          <button id="submit_button" type="submit" class="btn btn-primary btn-user btn-block">Register Account</button>
+                      </form>
+                      <hr>
+                      <div class="text-center">
+                          <a class="small" href="{% url 'login' %}">Already have an account? Login!</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+</div>
+
+<div style="margin-top: -1in;">
+  {% if form.errors %} {% for key, value in form.errors.items %}
+    <div
+      class="alert alert-danger alert-dismissable fade show reg-error"
+      role="alert"
+    >
+      <strong>Error!</strong> {{value|striptags}}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %} {% endif %}
+</div>
+
+{% endblock %}

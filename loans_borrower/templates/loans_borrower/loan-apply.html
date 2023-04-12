@@ -1,0 +1,285 @@
+{% extends 'navbar/navbar.html' %}
+{% block content %} {% load static %}
+<style>
+    .business, .employee, #labelH, #labelM, #mobile_num, #home_num{
+        visibility: collapse;
+    }
+</style>
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+        <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i>
+            <div class="message">
+            &nbsp;{{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+        {% elif message.tags == 'error' %}
+        <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+            <i class="fas fa-times-circle"></i>
+            <div class="message">
+            &nbsp;{{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>  
+        {% endif %}
+    {% endfor %}  
+{% endif %}
+<h1 class="h3 mb-2" style="color:#00573f">Loan Application</h1>
+<div class="card shadow mb-4">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div hidden class="card-header py-3">
+            <strong class="m-0 font-weight-bold text-primary" style="font-size: 20px;">Status: {{loan_form.status}}</strong>
+            <strong class="m-0 font-weight-bold text-primary" style="font-size: 20px;">Loan Balance: {{loan_form.loan_bal}}</strong>        
+        </div>
+        
+        <div class="card-body">
+            <div class="row">
+                <table class="table table-bordered">
+                    <tr>
+                        <th class="table-warning" colspan="9" ><b>VEHICLE INFORMATION</b></th>
+                    </tr>
+                    <tr>
+                        <td class="table-light" colspan="1"><b>Manufacturer:</b><span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="2">{{loan_form.make}}</td>
+                        <td class="table-light" colspan="1"><b>Model:</b><span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="2">{{loan_form.model}}</td>
+                        <td class="table-light" colspan="1"><b>Selling Price:</b><span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="2">{{loan_form.sell_price}}</td>
+                    </tr>
+                    <tr>
+                        <td class="table-light"colspan="1" style="font-weight:bold ;">Downpayment Percentage:<span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="2" onchange="show()">{{loan_form.dp_percent}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Downpayment Amount:<span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="2" onchange="show_dpAmt()">{{loan_form.dp_amt}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Loan Amount:<span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="2">{{loan_form.loan_amt}}</td>
+                    </tr>
+                    <tr>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Number of Payments:<span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="1">{{loan_form.no_of_payments}}</td>
+                    </tr>
+                </table>
+                <table class="table table-bordered">
+                    <tr>
+                        <th class="table-warning" colspan="6"><b>BORROWER INFORMATION</b></th>
+                    </tr>
+                    <tr>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">First Name:<span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="1">{{loan_form.first_name}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Middle Name:</td>
+                        <td class="table-light" colspan="1">{{loan_form.middle_name}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Last Name:<span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="1">{{loan_form.last_name}}</td>
+                    </tr>
+                    <tr>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Birth Date:<span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="1">{{loan_form.birthdate}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Civil Status:<span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="1">{{loan_form.civ_status}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Home Ownership<span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="1">{{loan_form.home_own}}</td>
+                    </tr>
+                    <tr>
+                        <td class="table-light"colspan="1" style="font-weight:bold ;">Length of Stay:<span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="1">{{loan_form.len_stay_num}}{{loan_form.len_stay}}</td>
+                    </tr>
+                    <tr>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Home Address:<span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="1">{{loan_form.unit_no}}</td>
+                        <td class="table-light" colspan="2">{{loan_form.condo_name}}</td>
+                        <td class="table-light" colspan="2">{{loan_form.street}}</td>
+                    </tr>
+                    <tr>
+                        <td class="table-light" colspan="1">{{loan_form.subdiv_brgy}}</td>
+                        <td class="table-light" colspan="1">{{loan_form.city}}</td>
+                        <td class="table-light" colspan="2">{{loan_form.municip_prov}}</td>
+                        <td class="table-light" colspan="2">{{loan_form.country}}</td>
+                    </tr>
+                </table>
+                <table class="table table-bordered">
+                    <tr>
+                        <th class="table-warning" colspan="8"><b>CONTACT INFORMATION</b></th>
+                    </tr>
+                    <tr>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Phone Type:<span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="1" onchange="swap()" >{{loan_form.phone_type}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Email Address:<span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="1">{{loan_form.email_add}}</td>
+                    </tr>
+                    <tr>
+                        <td class="table-light" colspan="1" id="labelH" style="font-weight:bold ;">Home Number: </td>
+                        <td class="table-light" colspan="1">{{loan_form.home_num}}</td>
+                        <td class="table-light" colspan="1" id="labelM" style="font-weight:bold ;">Mobile Number:</td>
+                        <td class="table-light" colspan="1">{{loan_form.mobile_num}}</td>
+                    </tr>
+                </table>
+                <table class="table table-bordered">
+                    <tr>
+                        <th class="table-warning" colspan="6"><b>EMPLOYMENT/BUSINESS INFORMATION</b></th>
+                    </tr>
+                    <tr>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Primary Source of Income<span style="color: red;">*</span></td>
+                        <td class="table-light" colspan="1" onchange="pop()">{{loan_form.prime_income}}</td>
+                    </tr>
+                    <tr class="employee">
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Employment Type</td>
+                        <td class="table-light" colspan="1">{{loan_form.emp_type}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Employer's Name</td>
+                        <td class="table-light" colspan="1">{{loan_form.emp_name}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Position</td>
+                        <td class="table-light" colspan="1">{{loan_form.job_pos}}</td>
+                    </tr>
+                    <tr class="employee">
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Tenure</td>
+                        <td class="table-light" colspan="1">{{loan_form.emp_tenure_num}}{{loan_form.emp_tenure}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Monthly Income</td>
+                        <td class="table-light" colspan="1">{{loan_form.emp_monthly_income}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Employee No.</td>
+                        <td class="table-light" colspan="1">{{loan_form.emp_work_no}}</td>
+                    </tr>
+                    <tr class="business">
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Business Type</td>
+                        <td class="table-light" colspan="1">{{loan_form.bsns_type}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Business Name</td>
+                        <td class="table-light" colspan="1">{{loan_form.bsns_name}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Tenure</td>
+                        <td class="table-light" colspan="1">{{loan_form.bsns_tenure}}{{loan_form.bsns_tenure_num}}</td>
+                    </tr>
+                    <tr class="business">
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Monthly Income</td>
+                        <td class="table-light" colspan="1">{{loan_form.bsns_monthly_income}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Business no.</td>
+                        <td class="table-light" colspan="1">{{loan_form.bsns_work_no}}</td>
+                    </tr>
+                </table>
+                <table class="table table-bordered business">
+                    <tr>
+                        <th class="table-warning" colspan="8"><b>BUSINESS ADDRESS</b></th>
+                    </tr>
+                    <tr>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Unit no.</td>
+                        <td class="table-light" colspan="1">{{loan_form.bsns_unit_no}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Condominium Name</td>
+                        <td class="table-light" colspan="2">{{loan_form.bsns_condo_name}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Street</td>
+                        <td class="table-light" colspan="2">{{loan_form.bsns_street}}</td>
+                    </tr>
+                    <tr>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Subdivision/Barangay</td>
+                        <td class="table-light" colspan="1">{{loan_form.bsns_subdiv_brgy}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">City</td>
+                        <td class="table-light" colspan="1">{{loan_form.bsns_city}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Municipality/Province</td>
+                        <td class="table-light" colspan="1">{{loan_form.bsns_municip_prov}}</td>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Country</td>
+                        <td class="table-light" colspan="1">{{loan_form.bsns_country}}</td>
+                    </tr>
+                </table>
+                <table class="table table-bordered">
+                    <tr>
+                        <th class="table-warning" colspan="9"><b>UPLOAD LOAN DOCUMENTS</b></th>
+                    </tr>
+                    <tr>
+                        <td class="table-light" colspan="1" style="font-weight:bold ;">Loan Documents:</td>
+                        <td class="table-light" colspan="2">{{loan_form.loan_docs}}</td>
+                    </tr>
+                </table>
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function show(){
+        var price = document.getElementById('sell_price').value;
+        var dp_percent = document.getElementById('dp_percent').value;
+        
+        var dp_amt = price * (dp_percent/100);
+        document.getElementById('dp_amt').value = dp_amt;
+        document.getElementById('loan_amt').value = price - dp_amt;
+
+        var loan_bal = document.getElementById('loan_amt').value;
+        document.getElementById('loan_bal').value = loan_bal;
+    }
+
+    function show_dpAmt(){
+        var price = document.getElementById('sell_price').value;
+        var dp_amt = document.getElementById('dp_amt').value;
+
+        var dp_percent = (100*dp_amt)/price;
+        document.getElementById('dp_percent').value = dp_percent.toFixed();
+        document.getElementById('loan_amt').value = price - dp_amt;
+
+        var loan_bal = document.getElementById('loan_amt').value;
+        document.getElementById('loan_bal').value = loan_bal;
+    }
+
+    function swap(){
+        var type = document.getElementById('phone_type').value;
+        var home = document.getElementById('home_num');
+        var mobile = document.getElementById('mobile_num');
+        var labelH = document.getElementById('labelH');
+        var labelM = document.getElementById('labelM');
+        
+        if(type == 'Home'){
+            if(mobile.style.visibility == 'visible'){
+                mobile.style.visibility = 'collapse';
+                labelM.style.visibility = 'collapse';
+            }
+            home.style.visibility = 'visible';
+            labelH.style.visibility = 'visible';
+        }else if(type == 'Mobile'){
+            if(home.style.visibility == 'visible'){
+                home.style.visibility = 'collapse'
+                labelH.style.visibility = 'collapse';
+            }
+            mobile.style.visibility = 'visible';
+            labelM.style.visibility = 'visible';
+        }else{
+            home.style.visibility = 'collapse'
+            labelH.style.visibility = 'collapse';
+
+            mobile.style.visibility = 'collapse';
+            labelM.style.visibility = 'collapse';
+        }
+    }
+    function pop(){
+        var type = document.getElementById('prime_income').value;
+        var emp = document.querySelectorAll('.employee');
+        var bsns = document.querySelectorAll('.business');
+        if(type == 'Employment'){
+            bsns.forEach(b => {
+                if(b.style.visibility == 'visible'){
+                    b.style.visibility = 'collapse';
+                }
+            })
+            emp.forEach(e => {
+                e.style.visibility = 'visible';
+            })
+        }else if(type == 'Business'){
+            emp.forEach(e => {
+                if(e.style.visibility == 'visible'){
+                    e.style.visibility = 'collapse';
+                }
+            })
+            bsns.forEach(b => {
+                b.style.visibility = 'visible';
+            })
+        }else{
+            emp.forEach(e => {
+                e.style.visibility = 'collapse';
+            })
+            bsns.forEach(b => {
+                b.style.visibility = 'collapse';
+            })
+        }
+    }
+
+</script>
+
+{% endblock %}
