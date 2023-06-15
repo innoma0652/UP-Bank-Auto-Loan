@@ -12,6 +12,7 @@
     <meta name="author" content="">
 
     <title>UPBank</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css" crossorigin="anonymous">
 
     <!-- Favicon  -->
     <link rel="icon" type="image/png" href="{% static '/images/icon.png' %}">
@@ -38,8 +39,7 @@
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
-                <div class="sidebar-brand-icon rotate-n-15">
-                </div>
+                <div class="sidebar-brand-icon"><i class="fa fa-building-columns"></i></div>
                 <div class="sidebar-brand-text mx-3">UPBank</div>
             </a>
 
@@ -141,6 +141,7 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        <i class="fa-solid fa-user"> {{user.username}}</i>
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">

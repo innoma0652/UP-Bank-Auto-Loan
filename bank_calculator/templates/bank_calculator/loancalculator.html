@@ -27,8 +27,8 @@
                                                           <div class="col ">
                                                             <label for="sellingprice" class="form-label calcu-labels" style="color: black">Selling Price</label>
                                                             <div class="calcu-right input-group mb-3">
-                                                                <span class="input-group-text" id="basic-addon1" style="width:10%"><p style="margin:auto">PhP</p></span>
-                                                                <input required type="number" min="0" id="sellingprice" class="calcu-field p-1 border bg-light" name="sellingprice" step="0.000000000000000001" placeholder="0.00" class="form-control" style="width:90%">
+                                                                <span class="input-group-text" id="basic-addon1" style="width:10%"><p style="margin:auto">Php</p></span>
+                                                                <input required type="number" min="0" id="sellingprice" class="calcu-field p-1 border bg-light" name="sellingprice" step="1" placeholder="0.00" class="form-control" style="width:90%">
                                                             </div>
                                                           </div>
                                                         </div>
@@ -47,7 +47,7 @@
                                                             <label for="amount" style="color: black">Amount</label>
                                                             <div class="calcu-right input-group mb-3">
                                                               <span class="input-group-text" id="basic-addon1" style="width:20%"><p style="margin:auto">PhP</p></span>
-                                                              <input required aria-describedby="basic-addon1" type="number"  min="0" step="0.000000000000000001" class="calcu-field p-1 border bg-light" id="amount" name="amount" placeholder="0.00" style="width:80%">
+                                                              <input required aria-describedby="basic-addon1" type="number"  min="0" step="1" class="calcu-field p-1 border bg-light" id="amount" name="amount" placeholder="0.00" style="width:80%">
                                                             </div>
                                                           </div>
                                                         </div>
@@ -102,7 +102,7 @@
                                                           Down Payment
                                                         </div>
                                                         <div class="col" style="text-align:left">
-                                                          ₱ {{amount|intcomma}}({{percentage}}%)
+                                                          ₱ {{amount|intcomma}} ({{percentage}}%)
                                                         </div>
                                                     </div><br>
                                                     <div class="row gx-5">
@@ -110,7 +110,7 @@
                                                           Amount Financed
                                                         </div>
                                                         <div class="col" style="text-align:left">
-                                                          ₱ {{loan}}
+                                                          ₱ {{loan|intcomma}}
                                                         </div>
                                                     </div><br>
                                                     <div class="row gx-5">

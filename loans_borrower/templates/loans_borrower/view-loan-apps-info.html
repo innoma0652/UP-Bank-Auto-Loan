@@ -152,6 +152,7 @@
                             <a href="/static{{ loan.loan_docs.url }}" class="btn btn-primary btn-sm" target="_blank">
                                 View Documents
                             </a>
+                            <a href="{% url 'loan-docs-upload' loan.id %}" class="btn btn-primary btn-sm">Add File</a>
                         </td>
                         {% endif %}
                     </tr> 
