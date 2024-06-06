@@ -12,6 +12,7 @@ from django.db.models.functions import ExtractMonth, ExtractYear
 from bank_calculator.views import pmt
 import logging
 import uuid
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 def account_registration(request):
@@ -104,3 +105,31 @@ def deposit_money(request):
 
     form = BankAccountForm()
     return render(request, 'create_manage_acc/deposit-money.html', {'form':form, 'bank_bal': bankBal})
+
+def approve_deposit(request, deposit_id):
+    deposit = get_object_or_404(BankAccount, pk=deposit_id)
+    deposit.status = 'Approved'
+    deposit.save()
+    return redirect('approve_deposit')
+
+def reject_deposit(request, deposit_id):
+    deposit = get_object_or_404(BankAccount, pk=deposit_id)
+    deposit.status = 'Rejected'
+    deposit.save()
+    return redirect('reject_deposit')
+
+def submit_deposit(request):
+    if request.method == 'POST':
+        form = DepositForm(request.POST)
+        if form.is_valid():
+            new_deposit = form.save(commit=False)
+            new_deposit.user = request.user
+            new_deposit.save()
+            return redirect('view_deposits')  # Redirect to the deposits view page
+    else:
+        form = DepositForm()
+    return render(request, 'submit_deposit.html', {'form': form})
+
+def view_deposits(request):
+    deposits = BankAccount.objects.all()  # Or filter based on certain criteria
+    return render(request, 'create_manage_acc/view-deposits.html', {'deposits': deposits})

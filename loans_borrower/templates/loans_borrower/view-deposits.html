@@ -16,6 +16,7 @@
                             <th>Account Name</th>
                             <th>Reference Number</th>
                             <th>Amount Deposited</th>
+                            <th>Approve/Reject</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -25,6 +26,16 @@
                                 <td>{{ deposit.account_name }}</td>
                                 <td>{{ deposit.reference_number }}</td>
                                 <td>₱ {{ deposit.amount|intcomma }}</td>
+                                <td>
+                                    <form action="{% url 'approve_deposit' deposit.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success">Approve</button>
+                                    </form>
+                                    <form action="{% url 'reject_deposit' deposit.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Reject</button>
+                                    </form>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>

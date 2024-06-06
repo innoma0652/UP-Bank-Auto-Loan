@@ -79,6 +79,14 @@
                 </div>
             </li>
 
+            <!-- Nav Item - Deposit Applications -->
+            <li class="nav-item {% if request.resolver_match.view_name == 'view-deposits' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'view-deposits' %}">
+                    <i class="fas fa-fw fa-university"></i>
+                    <span>View Deposits</span>
+                </a>
+            </li>
+
             <!-- Divider -->
             <hr class="sidebar-divider">
             <li class="nav-item">
@@ -164,7 +172,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; UPBank 2022</span>
+                        <span>Copyright &copy; UPBank 2024</span>
                     </div>
                 </div>
             </footer>
