@@ -78,6 +78,11 @@
                         <i class="fas fa-fw fa-folder"></i>
                         <span>Loan Applications</span></a>
                     </li>
+                    <li class="nav-item {% if request.resolver_match.view_name == 'view-deposits' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'view-deposits' %}">
+                        <i class="fas fa-fw fa-dollar-sign"></i>
+                        <span>View Deposit Info</span></a>
+                    </li>
 
                         {% if request.user|has_group:"hasbankaccount" %}
                         <li class="nav-item {% if request.resolver_match.view_name == 'deposit-money' %}active{% endif %}">

@@ -1,0 +1,35 @@
+{% extends 'bank_officer/navbar.html' %}
+{% load static %}
+{% block content %}
+{% load humanize %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h3 class="m-0 font-weight-bold" style="color:#00573f">Deposited Money</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered text-gray-900" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Application No.</th>
+                            <th>Status</th>
+                            <th>Account Name</th>
+                            <th>Reference Number</th>
+                            <th>Amount Deposited</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for deposit in deposits %}
+                                <td>{{ deposit.application_no }}</td>
+                                <td>{{ deposit.status }}</td>
+                                <td>{{ deposit.account_name }}</td>
+                                <td>{{ deposit.reference_number }}</td>
+                                <td>₱ {{ deposit.amount|intcomma }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

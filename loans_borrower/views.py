@@ -3,6 +3,7 @@ from loans_borrower.models import Loans
 from .forms import *
 from django.contrib import messages
 from datetime import datetime
+from bank_officer.models import Deposit
 
 # Create your views here.
 
@@ -16,6 +17,9 @@ def viewLoanApps(request):
     }
     return render(request, 'loans_borrower/view-loan-apps.html', data)
 
+def view_deposit_app_info(request, deposit_id):
+    # Your view logic here
+    pass
 
 def viewLoanAppsInfo(request, pk):
     loan = Loans.objects.get(id=pk)
@@ -65,3 +69,8 @@ def loanDocsUpload(request,pk):
         'loan_form' : loan_form
     }
     return render(request, 'loans_borrower/loan-docs-upload.html', data)
+
+def view_deposits(request):
+    # Assuming Deposit is a model that contains deposit data
+    deposits = Deposit.objects.all()
+    return render(request, 'loans_borrower/view-deposits.html', {'deposits': deposits})
