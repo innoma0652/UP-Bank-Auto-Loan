@@ -84,13 +84,13 @@ def js_redirect(request):
     return render(request, 'create_manage_acc/confirmation.html', context)
 
 def approve_deposit(request, deposit_id):
+    # Ensure that the query uniquely identifies one BankAccount
     deposit = get_object_or_404(BankAccount, pk=deposit_id)
     if deposit.status != 'Approved':
         deposit.status = 'Approved'
         deposit.save()
-        user_account = BankAccount.objects.get(user=deposit.user)
-        user_account.balance += deposit.amount
-        user_account.save()
+        deposit.balance += deposit.deposit
+        deposit.save()
     return redirect('view_deposit_applications')
 
 def reject_deposit(request, deposit_id):
@@ -100,8 +100,8 @@ def reject_deposit(request, deposit_id):
     return redirect('view_deposit_applications')
 
 def view_deposit_applications(request):
-    deposits = BankAccount.objects.filter(status='Pending')  # Adjust this query as needed
-    print(deposits)
+    deposits = BankAccount.objects.filter(status='Pending').order_by('-id')
+    print(deposits)  # Debug: Print deposits to check
     return render(request, 'create_manage_acc/deposit_applications.html', {'deposits': deposits})
 
 def confirmation(request):
