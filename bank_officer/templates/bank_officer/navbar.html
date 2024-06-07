@@ -80,8 +80,8 @@
             </li>
 
             <!-- Nav Item - Deposit Applications -->
-            <li class="nav-item {% if request.resolver_match.view_name == 'view-deposits' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'view-deposits' %}">
+            <li class="nav-item {% if request.resolver_match.view_name == 'view_deposit_applications' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'view_deposit_applications' %}">
                     <i class="fas fa-fw fa-university"></i>
                     <span>View Deposits</span>
                 </a>

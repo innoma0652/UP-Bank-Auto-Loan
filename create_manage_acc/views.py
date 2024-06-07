@@ -54,68 +54,48 @@ def generate_deposit_id():
 
 def deposit_money(request):
     logger = logging.getLogger(__name__)
-    logger.debug("Received POST data: %s", request.POST)
-    if not BankAccount.objects.filter(user = request.user).exists():
-        print("does not exist")
-        form = BankAccountForm()
-        if(request.method == 'POST'):
-            if request.POST.get('balance') is None:
-                form = BankAccountForm({
-                    'user':request.user,
-                    'deposit': request.POST.get('deposit'),
-                    'balance': 0
-                    })
-            if form.is_valid():
-                form.save()
-                return render(request, 'create_manage_acc/deposit-money.html', {'form':form, })
-        return render(request, 'create_manage_acc/deposit-money.html', {'form':form, })        
-    bank_acc = BankAccount.objects.filter(user = request.user).latest('id')
-    bankBal = bank_acc.balance
-    deposit = request.POST.get('deposit')
-    if deposit is not None:
-        bankBal = float(deposit) + float(bankBal)
-    else:
-        # Handle the case where deposit is None, perhaps by setting a default value or returning an error message
-        bankBal += 0  # Example: default to adding 0 if no deposit is provided
-    form = BankAccountForm()
+    form = BankAccountForm(request.POST or None)
+    try:
+        bank_acc = BankAccount.objects.filter(user=request.user).latest('id')
+        bankBal = float(bank_acc.balance)
+        deposit_amount = float(bank_acc.deposit)
+    except BankAccount.DoesNotExist:
+        logger.error("No bank account found for the user.")
+        bankBal = 0  # Default balance if no account exists
 
-    if(request.method == 'POST'):
-
-        # Generate a unique deposit_id
-        deposit_id = generate_deposit_id()
-
-        bankBal = float(request.POST.get('deposit')) + float(bankBal)
-
-        form = BankAccountForm({
-            'user':request.user,
-            'deposit': request.POST.get('deposit'),
-            'balance': bankBal
-            })
+    if request.method == 'POST':
         if form.is_valid():
             deposit = form.save(commit=False)
-            deposit.status = 'Pending'  # Set the status to Pending
+            deposit.user = request.user
+            deposit.status = 'Pending'
             deposit.save()
-            return redirect('deposit-money')
+            logger.info(f"Deposit saved with ID {deposit.id}")
+            return redirect('confirmation')  # Redirect to the confirmation page
+        else:
+            logger.error("Form is not valid")
+            logger.error(form.errors)
 
-    form = BankAccountForm()
-    return render(request, 'create_manage_acc/deposit-money.html', {'form':form, 'bank_bal': bankBal})
+    return render(request, 'create_manage_acc/deposit-money.html', {'deposit': deposit_amount, 'form': form, 'bank_bal': bankBal})
 
 def approve_deposit(request, deposit_id):
     deposit = get_object_or_404(BankAccount, pk=deposit_id)
-    if deposit.status != 'Approved':  # Check if the deposit is not already approved
+    if deposit.status != 'Approved':
         deposit.status = 'Approved'
         deposit.save()
         user_account = BankAccount.objects.get(user=deposit.user)
         user_account.balance += deposit.amount
         user_account.save()
-    return redirect('approve_deposit')
+    return redirect('view_deposit_applications')
 
 def reject_deposit(request, deposit_id):
     deposit = get_object_or_404(BankAccount, pk=deposit_id)
     deposit.status = 'Rejected'
     deposit.save()
-    return redirect('reject_deposit')
+    return redirect('view_deposit_applications')
 
-def view_deposits(request):
-    deposits = BankAccount.objects.all()  # Or filter based on certain criteria
-    return render(request, 'create_manage_acc/view-deposits.html', {'deposits': deposits})
+def view_deposit_applications(request):
+    deposits = BankAccount.objects.filter(status='Pending')  # Adjust this query as needed
+    return render(request, 'create_manage_acc/deposit_applications.html', {'deposits': deposits})
+
+def confirmation(request):
+    return render(request, 'create_manage_acc/confirmation.html')

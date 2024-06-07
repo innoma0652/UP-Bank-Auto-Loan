@@ -1,4 +1,4 @@
-{% extends 'navbar/navbar.html' %}
+{% extends 'bank_officer/navbar.html' %}
 {% block content %}
 <h2>Deposit Applications</h2>
 <table>
@@ -13,21 +13,22 @@
     </thead>
     <tbody>
         {% for deposit in deposits %}
-            <td>{{ deposit.application_no }}</td>
-            <td>{{ deposit.status }}</td>
-            <td>{{ deposit.account_name }}</td>
-            <td>{{ deposit.reference_number }}</td>
-            <td>₱ {{ deposit.amount|intcomma }}</td>
-            <td>
-                <form action="{% url 'approve_deposit' deposit.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success">Approve</button>
-                </form>
-                <form action="{% url 'reject_deposit' deposit.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Reject</button>
-                </form>
-            </td>
+            <tr>
+                <td>{{ deposit.id }}</td>
+                <td>{{ deposit.user.username }}</td>
+                <td>{{ deposit.reference_number }}</td>
+                <td>₱ {{ deposit.amount }}</td>
+                <td>
+                    <form action="{% url 'approve_deposit' deposit.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </form>
+                    <form action="{% url 'reject_deposit' deposit.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                    </form>
+                </td>
+            </tr>
         {% endfor %}
     </tbody>
 </table>
