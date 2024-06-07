@@ -1,0 +1,34 @@
+{% extends 'navbar/navbar.html' %}
+{% block content %}
+<h2>Deposit Applications</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Deposit ID</th>
+            <th>User Name</th>
+            <th>Reference No.</th>
+            <th>Amount</th>
+            <th>Approve/Reject</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for deposit in deposits %}
+            <td>{{ deposit.application_no }}</td>
+            <td>{{ deposit.status }}</td>
+            <td>{{ deposit.account_name }}</td>
+            <td>{{ deposit.reference_number }}</td>
+            <td>₱ {{ deposit.amount|intcomma }}</td>
+            <td>
+                <form action="{% url 'approve_deposit' deposit.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Approve</button>
+                </form>
+                <form action="{% url 'reject_deposit' deposit.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Reject</button>
+                </form>
+            </td>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
