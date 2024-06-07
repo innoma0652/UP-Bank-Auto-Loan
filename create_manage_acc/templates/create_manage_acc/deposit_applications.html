@@ -1,34 +1,45 @@
-{% extends 'navbar/navbar.html' %}
+{% extends 'bank_officer/navbar.html' %}
+{% load static %}
 {% block content %}
-<h2>Deposit Applications</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Deposit ID</th>
-            <th>User Name</th>
-            <th>Reference No.</th>
-            <th>Amount</th>
-            <th>Approve/Reject</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for deposit in deposits %}
-            <td>{{ deposit.application_no }}</td>
-            <td>{{ deposit.status }}</td>
-            <td>{{ deposit.account_name }}</td>
-            <td>{{ deposit.reference_number }}</td>
-            <td>₱ {{ deposit.amount|intcomma }}</td>
-            <td>
-                <form action="{% url 'approve_deposit' deposit.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success">Approve</button>
-                </form>
-                <form action="{% url 'reject_deposit' deposit.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Reject</button>
-                </form>
-            </td>
-        {% endfor %}
-    </tbody>
-</table>
-{% endblock %}
+{% load humanize %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h3 class="m-0 font-weight-bold" style="color:#00573f">Deposit Applications</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered text-gray-900" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Deposit ID</th>
+                        <th>User Name</th>
+                        <th>Reference No.</th>
+                        <th>Amount</th>
+                        <th>Approve/Reject</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for deposit in deposits %}
+                    <tr>
+                        <td>{{ deposit.id }}</td>
+                        <td>{{ deposit.user.username }}</td>
+                        <td>{{ deposit.reference_number }}</td>
+                        <td>₱ {{ deposit.amount|intcomma }}</td>
+                        <td>
+                            <form action="{% url 'approve_deposit' deposit.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </form>
+                            <form action="{% url 'reject_deposit' deposit.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -11,6 +11,7 @@ urlpatterns = [
     path('download-loan-app/<int:pk>', views.GeneratePDF.as_view(), name="generate-pdf"),
     path('approve-loan-app/<int:pk>', views.approve_loan_app, name="approve-loan"),
     path('reject-loan-app/<int:pk>', views.reject_loan_app, name="reject-loan"),
+    path('view-deposits/', views.view_deposit_applications, name='view_deposit_applications'),
 
     path('test', views.test, name="test"),
 ]
