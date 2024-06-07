@@ -35,7 +35,7 @@
             </div>
             <div class="col">
               <label for="account_name">Reference Number:</label>
-              <input type="number" id="reference_number" name="reference_number" class="form-control" required>
+              {{form.reference_number}}
             </div>
           </div>
           <br>
@@ -44,7 +44,12 @@
             <label class="form-check-label" for="confirm_details">Confirm that the details are finalized</label>
           </div>
           <br>
-          <button type="submit" class="btn btn-primary">Deposit</button>
+          <button id="confirm" type="submit" class="btn btn-primary">Deposit</button>
+          <script type="text/javascript">
+            document.getElementById('confirm').addEventListener('click', function() {
+              window.location.href = "{{ redirect_url }}";
+            });
+          </script>
         </form>
       </div>
     </div>

@@ -21,10 +21,10 @@
                 <tbody>
                     {% for deposit in deposits %}
                     <tr>
-                        <td>{{ deposit.id }}</td>
+                        <td>{{ deposit.deposit_id }}</td>
                         <td>{{ deposit.user.username }}</td>
                         <td>{{ deposit.reference_number }}</td>
-                        <td>₱ {{ deposit.amount|intcomma }}</td>
+                        <td>₱ {{ deposit.deposit|intcomma }}</td>
                         <td>
                             <form action="{% url 'approve_deposit' deposit.id %}" method="post">
                                 {% csrf_token %}

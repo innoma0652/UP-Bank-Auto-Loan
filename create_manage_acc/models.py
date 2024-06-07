@@ -49,6 +49,7 @@ class BankAccount(models.Model):
     balance = models.DecimalField(default=0, decimal_places=2, max_digits=50, blank=True)
     deposit_id = models.CharField(max_length=100, unique=True, null=True)
     status = models.CharField(max_length=100, default='Pending')
+    reference_number = models.CharField(max_length=100, null=True)
 
     def result(self):
         return '{}'.format(self.user)

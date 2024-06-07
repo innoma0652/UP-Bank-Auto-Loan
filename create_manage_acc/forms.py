@@ -62,7 +62,9 @@ class AccountRegForm(ModelForm):
 class BankAccountForm(forms.ModelForm):
     class Meta:
         model = BankAccount
-        fields = ['user', 'deposit', 'balance']
+        exclude = ['user', 'deposit_id', 'status']
+        fields = ['deposit', 'balance', 'reference_number']
         widgets = {
             'deposit': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter deposit amount'}),
+            'reference_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter reference number'}),
         }
