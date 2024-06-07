@@ -55,17 +55,11 @@ def generate_deposit_id():
 def deposit_money(request):
     logger = logging.getLogger(__name__)
     logger.debug("Received POST data: %s", request.POST)
-    amount_paid = request.POST.get('deposit')
-    if amount_paid is None:
-        amount_paid = 0  # Default value if not provided
-    else:
-        amount_paid = float(amount_paid)
     if not BankAccount.objects.filter(user = request.user).exists():
         print("does not exist")
         form = BankAccountForm()
         if(request.method == 'POST'):
             if request.POST.get('balance') is None:
-                
                 form = BankAccountForm({
                     'user':request.user,
                     'deposit': request.POST.get('deposit'),
@@ -98,18 +92,22 @@ def deposit_money(request):
             'balance': bankBal
             })
         if form.is_valid():
-            post = form.save(commit=False)
-            post.deposit_id = deposit_id  # Assign the generated deposit_id
-            post.save()
-            return render(request, 'create_manage_acc/deposit-money.html', {'form':form, 'bank_bal': bankBal, 'deposit_id': deposit_id})
+            deposit = form.save(commit=False)
+            deposit.status = 'Pending'  # Set the status to Pending
+            deposit.save()
+            return redirect('deposit-money')
 
     form = BankAccountForm()
     return render(request, 'create_manage_acc/deposit-money.html', {'form':form, 'bank_bal': bankBal})
 
 def approve_deposit(request, deposit_id):
     deposit = get_object_or_404(BankAccount, pk=deposit_id)
-    deposit.status = 'Approved'
-    deposit.save()
+    if deposit.status != 'Approved':  # Check if the deposit is not already approved
+        deposit.status = 'Approved'
+        deposit.save()
+        user_account = BankAccount.objects.get(user=deposit.user)
+        user_account.balance += deposit.amount
+        user_account.save()
     return redirect('approve_deposit')
 
 def reject_deposit(request, deposit_id):
@@ -117,18 +115,6 @@ def reject_deposit(request, deposit_id):
     deposit.status = 'Rejected'
     deposit.save()
     return redirect('reject_deposit')
-
-def submit_deposit(request):
-    if request.method == 'POST':
-        form = DepositForm(request.POST)
-        if form.is_valid():
-            new_deposit = form.save(commit=False)
-            new_deposit.user = request.user
-            new_deposit.save()
-            return redirect('view_deposits')  # Redirect to the deposits view page
-    else:
-        form = DepositForm()
-    return render(request, 'submit_deposit.html', {'form': form})
 
 def view_deposits(request):
     deposits = BankAccount.objects.all()  # Or filter based on certain criteria

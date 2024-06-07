@@ -71,7 +71,7 @@ def reject_loan_app(request,pk):
     return redirect ('review')
 
 def view_deposits(request):
-    deposits = Deposit.objects.all()  # Assuming you have a Deposit model
+    deposits = Deposit.objects.filter(status='Pending')  # Filter by Pending status
     return render(request, 'bank_officer/view-deposits.html', {'deposits': deposits})
 
 # Generate Loan App to PDF
