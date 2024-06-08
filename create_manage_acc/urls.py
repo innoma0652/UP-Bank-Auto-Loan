@@ -7,5 +7,7 @@ urlpatterns = [
     path('deposit/approve/<int:deposit_id>/', views.approve_deposit, name='approve_deposit'),
     path('deposit/reject/<int:deposit_id>/', views.reject_deposit, name='reject_deposit'),
     path('confirmation/', views.confirmation, name='confirmation'),
+    path('my-dues/', views.my_dues, name='my_dues'),
+    path('all-dues/', views.all_dues, name='all_dues'),
 ]
 

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils import timezone
+from bank_calculator.views import pmt
 
 # Create your models here.
 class Loans(models.Model):
@@ -121,6 +123,15 @@ class Loans(models.Model):
     def __str__(self):
         return "{}, {} - {}".format(self.last_name, self.first_name, self.id)
 
+class Payment(models.Model):
+    loan = models.ForeignKey(Loans, on_delete=models.CASCADE)
+    amount_due = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
+    due_date = models.DateField()
+    status = models.CharField(max_length=10, choices=(('Pending', 'Pending'), ('Paid', 'Paid'), ('Overdue', 'Overdue')))
 
-
- 
+    def save(self, *args, **kwargs):
+        if not self.amount_due:
+            self.amount_due = pmt(self.loan.dp_percent, self.loan.loan_amt, self.loan.no_of_payments)
+        if self.due_date < timezone.now().date():
+            self.status = 'Overdue'
+        super(Payment, self).save(*args, **kwargs)
