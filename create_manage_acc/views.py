@@ -67,24 +67,30 @@ def deposit_money(request):
         if form.is_valid():
             deposit = form.save(commit=False)
             deposit.user = request.user
+            deposit.deposit_id = generate_deposit_id()  # Assuming you have a function to generate this
             deposit.status = 'Pending'
             deposit.save()
+            print(deposit.reference_number, deposit.id, deposit.deposit_id)
             logger.info(f"Deposit saved with ID {deposit.id}")
-            return redirect('confirmation')  # Redirect to the confirmation page
+            return render(request, 'create_manage_acc/confirmation.html', {'deposit': deposit_amount, 'form': form, 'bank_bal': bankBal})
         else:
             logger.error("Form is not valid")
             logger.error(form.errors)
 
     return render(request, 'create_manage_acc/deposit-money.html', {'deposit': deposit_amount, 'form': form, 'bank_bal': bankBal})
 
+def js_redirect(request):
+    context = {'redirect_url': 'confirmation/'}
+    return render(request, 'create_manage_acc/confirmation.html', context)
+
 def approve_deposit(request, deposit_id):
+    # Ensure that the query uniquely identifies one BankAccount
     deposit = get_object_or_404(BankAccount, pk=deposit_id)
     if deposit.status != 'Approved':
         deposit.status = 'Approved'
         deposit.save()
-        user_account = BankAccount.objects.get(user=deposit.user)
-        user_account.balance += deposit.amount
-        user_account.save()
+        deposit.balance += deposit.deposit
+        deposit.save()
     return redirect('view_deposit_applications')
 
 def reject_deposit(request, deposit_id):
@@ -94,7 +100,8 @@ def reject_deposit(request, deposit_id):
     return redirect('view_deposit_applications')
 
 def view_deposit_applications(request):
-    deposits = BankAccount.objects.filter(status='Pending')  # Adjust this query as needed
+    deposits = BankAccount.objects.filter(status='Pending').order_by('-id')
+    print(deposits)  # Debug: Print deposits to check
     return render(request, 'create_manage_acc/deposit_applications.html', {'deposits': deposits})
 
 def confirmation(request):
