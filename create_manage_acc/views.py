@@ -6,13 +6,14 @@ from create_manage_acc.models import BankAccount
 from . import views
 from create_manage_acc.forms import AccountRegForm, BankAccountForm
 from django.contrib.auth.models import Group
-from loans_borrower.models import Loans
+from loans_borrower.models import Loans, Payment
 import datetime
 from django.db.models.functions import ExtractMonth, ExtractYear
 from bank_calculator.views import pmt
 import logging
 import uuid
 from django.shortcuts import get_object_or_404
+from django.db import models
 
 # Create your views here.
 def account_registration(request):
@@ -106,3 +107,12 @@ def view_deposit_applications(request):
 
 def confirmation(request):
     return render(request, 'create_manage_acc/confirmation.html')
+
+def my_dues(request):
+    user = request.user
+    payments = Payment.objects.filter(loan__user=user, loan__status='Approved').annotate(month=ExtractMonth('due_date')).values('month').annotate(total_due=models.Sum('amount_due')).order_by('month')
+    return render(request, 'create_manage_acc/my_dues.html', {'payments': payments})
+
+def all_dues(request):
+    payments = Payment.objects.filter(loan__status='Approved').select_related('loan__user').order_by('due_date')
+    return render(request, 'create_manage_acc/all_dues.html', {'payments': payments})

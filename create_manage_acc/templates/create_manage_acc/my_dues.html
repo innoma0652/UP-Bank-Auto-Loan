@@ -1,0 +1,47 @@
+{% extends 'navbar/navbar.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<style>
+    .table-responsive table {
+        color: #343434;
+    }
+
+    .table-responsive input[type="text"] {
+        color: #343434;
+    }
+
+    .button-width {
+        width: 150px;
+    }
+</style>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h3 class="m-0 font-weight-bold" style="color:#00573f">My Dues</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered text-gray-900" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Amount Due</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payments %}
+                    <tr>
+                        <td>{{ payment.month }}</td>
+                        <td>₱ {{ payment.total_due|intcomma }}</td>
+                        <td>{{ payment.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

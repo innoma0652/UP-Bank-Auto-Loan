@@ -79,6 +79,12 @@
                         <span>Loan Applications</span></a>
                     </li>
 
+                    <li class="nav-item {% if request.resolver_match.view_name == 'my_dues' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'my_dues' %}">
+                            <i class="fas fa-fw fa-folder"></i>
+                            <span>My Dues</span></a>
+                        </li>
+
                         {% if request.user|has_group:"hasbankaccount" %}
                         <li class="nav-item {% if request.resolver_match.view_name == 'deposit-money' %}active{% endif %}">
                             <a class="nav-link" href="{% url 'deposit-money' %}">

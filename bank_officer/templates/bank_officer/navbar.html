@@ -86,6 +86,13 @@
                 </div>
             </li>
 
+            <li class="nav-item {% if request.resolver_match.view_name == 'all_dues' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'all_dues' %}">
+                    <i class="fas fa-fw fa-money-bill-wave"></i>
+                    <span>All Dues</span>
+                </a>
+            </li>
+
             <!-- Nav Item - Deposit Applications -->
             <li class="nav-item {% if request.resolver_match.view_name == 'view_deposit_applications' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'view_deposit_applications' %}">

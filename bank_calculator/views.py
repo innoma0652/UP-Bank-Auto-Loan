@@ -3,12 +3,12 @@ from django.shortcuts import render
 from bank_calculator.models import Months_To_Pay
 
 # Create your views here.
-def pmt(percentage, loan, number_of_months):
+def pmt(percentage, loan_amount, number_of_months):
 
     number_of_months = int(number_of_months)
     #interest rate is 5.25%
     #formula for pmt used in spreadsheet
-    monthly_payment = (loan*(0.0525/12))/(1-(1+(0.0525/12))**-(12*(number_of_months/12)))
+    monthly_payment = (loan_amount*(0.0525/12))/(1-(1+(0.0525/12))**-(12*(number_of_months/12)))
 
     return monthly_payment
 
