@@ -2,6 +2,21 @@
 {% load static %}
 {% block content %}
 {% load humanize %}
+
+<style>
+    .table-responsive table {
+        color: #343434;
+    }
+
+    .table-responsive input[type="text"] {
+        color: #343434;
+    }
+
+    .button-width {
+        width: 150px;
+    }
+</style>
+
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h3 class="m-0 font-weight-bold" style="color:#00573f">Deposit Applications</h3>
@@ -26,14 +41,18 @@
                         <td>{{ deposit.reference_number }}</td>
                         <td>₱ {{ deposit.deposit|intcomma }}</td>
                         <td>
-                            <form action="{% url 'approve_deposit' deposit.id %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-success">Approve</button>
-                            </form>
-                            <form action="{% url 'reject_deposit' deposit.id %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">Reject</button>
-                            </form>
+                            <div style="padding-left: 30px;">
+                                <form action="{% url 'approve_deposit' deposit.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success button-width" style="background-color: #00573f !important;">Approve</button>
+                                </form>
+                            </div>
+                            <div style="padding-left: 30px; padding-top: 10px;">
+                                <form action="{% url 'reject_deposit' deposit.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger button-width" style="background-color: #7B1113 !important;">Reject</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}

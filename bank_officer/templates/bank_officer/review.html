@@ -2,6 +2,20 @@
 {% load static %}
 {% block content %}
 {% load humanize %}
+<style>
+    .table-responsive table {
+        color: #343434;
+    }
+
+    .table-responsive input[type="text"] {
+        color: #343434;
+    }
+
+    .button-width {
+        width: 150px;
+    }
+</style>
+
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h3 class="m-0 font-weight-bold" style="color:#014421">Loan Applications for Review</h3>
@@ -10,11 +24,11 @@
                             <div class="table-responsive">
                                 <table border="0" cellspacing="5" cellpadding="5">
                                 <tbody><tr>
-                                    <td>Minimum Loan Amount:</td>
-                                    <td><input type="text" id="min" name="min"></td>
+                                    <td style="color: #343434">Minimum Loan Amount:</td>
+                                    <td><input type="text" id="min" name="min" style="color: #343434;"></td>
                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                    <td>Maximum Loan Amount:</td>
-                                    <td><input type="text" id="max" name="max"></td>
+                                    <td style="color: #343434">Maximum Loan Amount:</td>
+                                    <td><input type="text" id="max" name="max" style="color: #343434;"></td>
                                 </tr>
                                 </tbody></table><br>
                                 <table id="example" class="display" style="width:100%">
@@ -39,10 +53,14 @@
                                                 <td>{{loan.loan_amt|intcomma}}</td>
                                                 <td>{{loan.app_date}}</td>
                                                 <td>
-                                                    <button id="submit_button" type="submit" class="btn btn-primary login-button">
-                                                    <a href="{% url 'loan-app' loan.id %}" style="color:white">View</a></button>
-                                                    <button id="submit_button" type="submit" class="btn btn-primary login-button">
-                                                    <a href="{% url 'generate-pdf' loan.id %}" style="color:white">Download</a></button>
+                                                    <div>
+                                                        <button id="submit_button" type="submit" class="btn btn-primary login-button button-width" style="background-color: #F3AA2C !important; border-color: #F3AA2C !important;">
+                                                        <a href="{% url 'loan-app' loan.id %}" style="color:white;">View</a></button>
+                                                    </div>
+                                                    <div style="padding-top: 10px;">
+                                                        <button id="submit_button" type="submit" class="btn btn-primary login-button button-width" style="background-color: #014421 !important; border-color: #014421 !important;">
+                                                        <a href="{% url 'generate-pdf' loan.id %}" style="color:white">Download</a></button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         {% endfor %}
