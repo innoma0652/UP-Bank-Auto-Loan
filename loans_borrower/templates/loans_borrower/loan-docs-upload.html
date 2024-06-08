@@ -21,7 +21,20 @@
         {% endif %}
     {% endfor %}  
 {% endif %}
-<h1 class="h3 mb-2" style="color:#00573f">Loan Application</h1>
+
+<style>
+    .text-dark-gray {
+    color: #343434;
+    }
+    .text-white {
+        color: white;
+    }
+    .maroon-background {
+        background-color: #7B1113 !important;
+    }
+</style>
+
+<h1 class="h3 mb-2 font-weight-bold" style="color:#00573f !important">Loan Application</h1>
 <div class="card shadow mb-4"></div>
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -142,14 +155,14 @@
             </div>
             <table class="table table-bordered">
                 <tr>
-                    <th class="table-warning" colspan="9"><b>UPLOAD LOAN DOCUMENTS</b></th>
+                    <th class="table-warning text-white maroon-background" colspan="9"><b>UPLOAD LOAN DOCUMENTS</b></th>
                 </tr>
                 <tr>
-                    <td class="table-light" colspan="1" style="font-weight:bold ;">Loan Documents:</td>
-                    <td class="table-light" colspan="2">{{loan_form.loan_docs}}</td>
+                    <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Loan Documents:</td>
+                    <td class="table-light text-dark-gray" colspan="2">{{loan_form.loan_docs}}</td>
                 </tr>
             </table>
-            <button type="submit" class="btn btn-success">Submit</button>
+            <button type="submit" class="btn btn-success" style="background-color: #00573f !important; border-color: #00573f;">Submit</button>
         </div>
     </form>
 </div>
