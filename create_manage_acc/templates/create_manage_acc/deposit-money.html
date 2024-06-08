@@ -4,37 +4,36 @@
 {% load humanize %}
 <div class="row gx-5">
     <div class="container-sm ">
-      <div class="col">
+      <div class="col" style="margin-bottom: 20px; padding: 5px 10px 0px 10px; border: 2px solid #ccc; display: inline-block; max-width: fit-content; border-radius: 10px;">
         <label for="bank_balance">Bank Balance:</label>
         {{ bank_bal }}
       </div>
-      <h1 class="h3 mb-2" style="color:#00573f">Deposit Money</h1>
+      <h1 class="h3 mb-2 font-weight-bold" style="color:#00573f">Deposit Money</h1>
       <div class="container overflow-hidden"style="font-family:Verdana">
         <form method="post" action="" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="row gx-5">
             <div class="col">
-              <label for="payment_method">Payment Method:</label>
-              <select id="payment_method" name="payment_method" class="form-control">
+              <label for="payment_method" style="color: #343434;">Payment Method:</label>
+              <select id="payment_method" name="payment_method" class="form-control" style="max-width: fit-content;">
                 <option value="gcash">Gcash</option>
-                <option value="paypal">Maya</option>
+                <option value="paypal">PayMaya</option>
                 <option value="paypal">PayPal</option>
-                <option value="credit">Credit</option>
               </select>
             </div>
           </div>
           <br>
           <div class="row gx-5">
             <div class="col">
-              <label for="reference_number">Account Name:</label>
+              <label for="reference_number" style="color: #343434;">Account Name:</label>
               <input type="text" id="account_name" name="account_name" class="form-control" required>
             </div>
             <div class="col">
-              <label for="amount_paid">Amount Paid:</label>
+              <label for="amount_paid" style="color: #343434;">Amount Paid:</label>
               {{ form.deposit }}
             </div>
             <div class="col">
-              <label for="account_name">Reference Number:</label>
+              <label for="account_name" style="color: #343434;">Reference Number:</label>
               {{form.reference_number}}
             </div>
           </div>
@@ -44,7 +43,7 @@
             <label class="form-check-label" for="confirm_details">Confirm that the details are finalized</label>
           </div>
           <br>
-          <button id="confirm" type="submit" class="btn btn-primary">Deposit</button>
+          <button id="confirm" type="submit" class="btn btn-primary" style="background-color: #00573f !important; border-color: #00573f ;">Deposit</button>
           <script type="text/javascript">
             document.getElementById('confirm').addEventListener('click', function() {
               window.location.href = "{{ redirect_url }}";
