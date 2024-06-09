@@ -14,6 +14,7 @@ import logging
 import uuid
 from django.shortcuts import get_object_or_404
 from django.db import models
+from django.db import transaction
 
 # Create your views here.
 def account_registration(request):
@@ -58,40 +59,46 @@ def deposit_money(request):
     form = BankAccountForm(request.POST or None)
     try:
         bank_acc = BankAccount.objects.filter(user=request.user).latest('id')
-        bankBal = float(bank_acc.balance)
+        bank_bal = float(bank_acc.balance)
         deposit_amount = float(bank_acc.deposit)
     except BankAccount.DoesNotExist:
-        logger.error("No bank account found for the user.")
-        bankBal = 0  # Default balance if no account exists
-
+        print("No bank account found for the user.")
+        bank_bal = 0  # Default balance if no account exists
+    print(bank_bal, deposit_amount, bank_bal+deposit_amount)
     if request.method == 'POST':
         if form.is_valid():
             deposit = form.save(commit=False)
             deposit.user = request.user
             deposit.deposit_id = generate_deposit_id()  # Assuming you have a function to generate this
             deposit.status = 'Pending'
+            deposit.balance = Decimal(bank_bal)
             deposit.save()
-            print(deposit.reference_number, deposit.id, deposit.deposit_id)
-            logger.info(f"Deposit saved with ID {deposit.id}")
-            return render(request, 'create_manage_acc/confirmation.html', {'deposit': deposit_amount, 'form': form, 'bank_bal': bankBal})
+            print(deposit.reference_number, deposit.id, deposit.deposit_id, deposit.balance+deposit.deposit)
+            print(f"Deposit saved with ID {deposit.id}")
+            return render(request, 'create_manage_acc/confirmation.html', {'deposit': deposit_amount, 'form': form, 'bank_bal': bank_bal})
         else:
             logger.error("Form is not valid")
             logger.error(form.errors)
 
-    return render(request, 'create_manage_acc/deposit-money.html', {'deposit': deposit_amount, 'form': form, 'bank_bal': bankBal})
+    return render(request, 'create_manage_acc/deposit-money.html', {'deposit': deposit_amount, 'form': form, 'bank_bal': bank_bal})
 
 def js_redirect(request):
     context = {'redirect_url': 'confirmation/'}
     return render(request, 'create_manage_acc/confirmation.html', context)
 
 def approve_deposit(request, deposit_id):
-    # Ensure that the query uniquely identifies one BankAccount
-    deposit = get_object_or_404(BankAccount, pk=deposit_id)
-    if deposit.status != 'Approved':
-        deposit.status = 'Approved'
-        deposit.save()
-        deposit.balance += deposit.deposit
-        deposit.save()
+    with transaction.atomic():
+        deposit = BankAccount.objects.select_for_update().get(pk=deposit_id)
+        user = deposit.user
+        if deposit.status != 'Approved':
+            print(f"Current balance before approval: {user} {deposit.balance}")
+            print(f"Deposit amount being approved: {deposit.deposit}")
+            deposit.status = 'Approved'
+            newbal = deposit.balance + deposit.deposit
+            deposit.balance = newbal
+            deposit.save()
+            print(f"New balance after approval: {user} {deposit.balance}")
+    deposit.save()
     return redirect('view_deposit_applications')
 
 def reject_deposit(request, deposit_id):

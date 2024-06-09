@@ -5,7 +5,7 @@
 <div class="row gx-5">
     <div class="container-sm ">
       <div class="col" style="margin-bottom: 20px; padding: 5px 10px 0px 10px; border: 2px solid #ccc; display: inline-block; max-width: fit-content; border-radius: 10px;">
-        <label for="bank_balance">Bank Balance:</label>
+        <label for="html_balance">Bank Balance:</label>
         {{ bank_bal }}
       </div>
       <h1 class="h3 mb-2 font-weight-bold" style="color:#00573f">Deposit Money</h1>
@@ -25,15 +25,15 @@
           <br>
           <div class="row gx-5">
             <div class="col">
-              <label for="reference_number" style="color: #343434;">Account Name:</label>
+              <label for="account_name" style="color: #343434;">Account Name:</label>
               <input type="text" id="account_name" name="account_name" class="form-control" required>
             </div>
             <div class="col">
-              <label for="amount_paid" style="color: #343434;">Amount Paid:</label>
+              <label for="html_deposit" style="color: #343434;">Amount Paid:</label>
               {{ form.deposit }}
             </div>
             <div class="col">
-              <label for="account_name" style="color: #343434;">Reference Number:</label>
+              <label for="html_reference_number" style="color: #343434;">Reference Number:</label>
               {{form.reference_number}}
             </div>
           </div>
