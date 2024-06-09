@@ -2,5 +2,7 @@
 {% block content %}
     <h1>Deposit Application Status</h1>
     <p>Your deposit application has been submitted.</p>
+    <button id="confirm" type="button" class="btn btn-primary"
+    style="background-color: #00573f !important; border-color: #00573f;"
+    onclick="location.href='{% url 'view-loan-apps' %}'">Go Back to Loan Applications</button>
 {% endblock %}
-

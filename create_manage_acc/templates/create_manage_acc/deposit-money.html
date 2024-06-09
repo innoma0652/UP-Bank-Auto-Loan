@@ -38,16 +38,33 @@
             </div>
           </div>
           <br>
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="confirm_details" required>
-            <label class="form-check-label" for="confirm_details">Confirm that the details are finalized</label>
-          </div>
-          <br>
-          <button id="confirm" type="submit" class="btn btn-primary" style="background-color: #00573f !important; border-color: #00573f ;">Deposit</button>
+          <button id="confirm" type="submit" class="btn btn-primary" style="background-color: #00573f !important; border-color: #00573f ;" disabled>Deposit</button>
           <script type="text/javascript">
-            document.getElementById('confirm').addEventListener('click', function() {
-              window.location.href = "{{ redirect_url }}";
+            function validateFields() {
+              let allFieldsFilled = true;
+              const fieldsToCheck = ['payment_method', 'account_name', 'id_deposit', 'id_reference_number']; // Add IDs of all required fields
+
+              fieldsToCheck.forEach(function(fieldId) {
+                const field = document.getElementById(fieldId);
+                if (!field || field.value.trim() === '') {
+                  allFieldsFilled = false;
+                  console.log("Field empty: " + fieldId); // Log which field is empty
+                }
+              });
+
+              document.getElementById('confirm').disabled = !allFieldsFilled;
+            }
+
+            document.querySelectorAll('input, select').forEach(function(input) {
+              input.addEventListener('change', validateFields);
             });
+
+            document.getElementById('depositForm').addEventListener('submit', function(event) {
+              if (!document.getElementById('confirm').disabled) {
+                window.location.href = "{{ redirect_url }}"; // Redirect to the specified URL
+              }
+            });
+            
           </script>
         </form>
       </div>
