@@ -78,11 +78,15 @@
                     </tr>
                     <tr>
                         <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">First Name:<span style="color: red;">*</span></td>
-                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.first_name}}</td>
+                        <td class="table-light text-dark-gray" colspan="1">
+                            <input type="text" name="first_name" value="{{ user.first_name }}" readonly>
+                        </td>
                         <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Middle Name:</td>
                         <td class="table-light text-dark-gray" colspan="1">{{loan_form.middle_name}}</td>
                         <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Last Name:<span style="color: red;">*</span></td>
-                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.last_name}}</td>
+                        <td class="table-light text-dark-gray" colspan="1">
+                            <input type="text" name="last_name" value="{{ user.last_name }}" readonly>
+                        </td>
                     </tr>
                     <tr>
                         <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Birth Date:<span style="color: red;">*</span></td>
@@ -117,7 +121,9 @@
                         <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Phone Type:<span style="color: red;">*</span></td>
                         <td class="table-light text-dark-gray" colspan="1" onchange="swap()" >{{loan_form.phone_type}}</td>
                         <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Email Address:<span style="color: red;">*</span></td>
-                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.email_add}}</td>
+                        <td class="table-light text-dark-gray" colspan="1">
+                            <input type="text" name="email_add" value="{{ user.email }}" readonly>
+                        </td>
                     </tr>
                     <tr>
                         <td class="table-light text-dark-gray" colspan="1" id="labelH" style="font-weight:bold ;">Home Number: </td>
@@ -167,7 +173,7 @@
                 </table>
                 <table class="table table-bordered business">
                     <tr>
-                        <th class="table-warning text-white" colspan="8"><b>BUSINESS ADDRESS</b></th>
+                        <th class="table-warning text-white maroon-background" colspan="8"><b>BUSINESS ADDRESS</b></th>
                     </tr>
                     <tr>
                         <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Unit no.</td>

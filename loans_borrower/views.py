@@ -72,3 +72,10 @@ def loanDocsUpload(request,pk):
 def profile(request):
 
     return render(request, 'loans_borrower/profile.html')
+
+def loan_apply(request):
+    # Assuming 'request.user' is your user instance and it has 'first_name', 'last_name', and 'email' fields
+    context = {
+        'user': request.user
+    }
+    return render(request, 'loans_borrower/loan-apply.html', context)
