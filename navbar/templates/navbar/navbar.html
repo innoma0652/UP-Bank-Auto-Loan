@@ -150,7 +150,7 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <i class="fa-solid fa-user"> {{user.username}}</i>
+                        <i class="fa-solid fa-user" onclick="location.href='{% url 'profile' %}'" title="View Profile" style="cursor: pointer;"> {{user.username}}</i>
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">

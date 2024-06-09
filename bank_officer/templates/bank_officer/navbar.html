@@ -93,6 +93,13 @@
                 </a>
             </li>
 
+            <li class="nav-item {% if request.resolver_match.view_name == 'loaner-status' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'loaner-status' %}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Loaner Status</span>
+                </a>
+            </li>
+
             <!-- Nav Item - Deposit Applications -->
             <li class="nav-item {% if request.resolver_match.view_name == 'view_deposit_applications' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'view_deposit_applications' %}">

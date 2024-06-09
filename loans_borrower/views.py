@@ -68,3 +68,7 @@ def loanDocsUpload(request,pk):
         'loan_form' : loan_form
     }
     return render(request, 'loans_borrower/loan-docs-upload.html', data)
+
+def profile(request):
+
+    return render(request, 'loans_borrower/profile.html')

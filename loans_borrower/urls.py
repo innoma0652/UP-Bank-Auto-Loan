@@ -8,6 +8,7 @@ urlpatterns = [
     path('view-loan-apps-info/<str:pk>', views.viewLoanAppsInfo, name="view-loan-apps-info"),
     path('loan-apply', views.loanApply, name="loan-apply"),
     path('loan-docs-upload/<str:pk>', views.loanDocsUpload, name="loan-docs-upload"),
+    path('profile/', views.profile, name='profile'),
 ]
 
 if settings.DEBUG:

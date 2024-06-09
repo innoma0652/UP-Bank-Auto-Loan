@@ -71,6 +71,13 @@ def reject_loan_app(request,pk):
     }
     return redirect ('review')
 
+def loaner_status(request):
+    loans = Loans.objects.filter()
+    data = {
+        'loans' : loans,
+    }
+    return render(request, 'bank_officer/loaner-status.html', data) 
+
 # Generate Loan App to PDF
 def fetch_resources(uri, rel):
     path = os.path.join(uri.replace(settings.STATIC_URL, ""))

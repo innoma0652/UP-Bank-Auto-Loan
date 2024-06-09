@@ -1,0 +1,85 @@
+{% extends 'bank_officer/navbar.html' %}
+{% load static %}
+{% block content %}
+{% load humanize %}
+<style>
+    .table-responsive table {
+        color: #343434;
+    }
+
+    .table-responsive input[type="text"] {
+        color: #343434;
+    }
+
+    .button-width {
+        width: 150px;
+    }
+
+</style>
+<script>
+    function updateBackgroundColor(selectElement, loanId) {
+        var selectedOption = selectElement.options[selectElement.selectedIndex];
+        // Set the background color to the color of the selected option
+        selectElement.style.backgroundColor = selectedOption.style.color;
+        // Save the selected option to local storage with a unique key
+        localStorage.setItem('selectedLoanerStatus_' + loanId, selectElement.value);
+    }
+
+    // Function to load the selected option from local storage
+    function loadSelectedOption(loanId) {
+        var selectedValue = localStorage.getItem('selectedLoanerStatus_' + loanId);
+        if (selectedValue) {
+            var selectElement = document.getElementById('select-loaner-status-' + loanId);
+            selectElement.value = selectedValue;
+            updateBackgroundColor(selectElement, loanId);
+        }
+    }
+
+    // Call loadSelectedOption for each loan when the page loads
+    window.onload = function() {
+        {% for loan in loans %}
+            loadSelectedOption({{ loan.id }});
+        {% endfor %}
+    };
+</script>
+
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h3 class="m-0 font-weight-bold" style="color:#014421">Loaner Status</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="example" class="display" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>Last Name</th>
+                                            <th>First Name</th>
+                                            <th>Middle Name</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for loan in loans %}
+                                             <tr>
+                                                <td>{{loan.id}}</a></td>
+                                                <td>{{loan.last_name}}</td>
+                                                <td>{{loan.first_name}}</td>
+                                                <td>{{loan.middle_name}}</td>
+                                                <td>
+                                                    <select id="select-loaner-status-{{ loan.id }}" name="loaner-status" class="form-control" style="max-width: fit-content; color:white;" onchange="updateBackgroundColor(this, {{ loan.id }})">
+                                                        <option value="" style="background-color: white;"></option>
+                                                        <option value="clean" style="color: #00573f; background-color: white;">Clean</option>
+                                                        <option value="delinquent" style="color: #F3AA2C; background-color: white;">Delinquent</option>
+                                                        <option value="blacklist" style="color: #7b1113; background-color: white;">Blacklisted</option>
+                                                      </select>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                         </div>
+                    </div>
+{% endblock content %}
+

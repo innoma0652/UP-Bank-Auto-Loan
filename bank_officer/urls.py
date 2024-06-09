@@ -12,6 +12,7 @@ urlpatterns = [
     path('approve-loan-app/<int:pk>', views.approve_loan_app, name="approve-loan"),
     path('reject-loan-app/<int:pk>', views.reject_loan_app, name="reject-loan"),
     path('view-deposits/', views.view_deposit_applications, name='view_deposit_applications'),
+    path('loaner-status', views.loaner_status, name="loaner-status"),
 
     path('test', views.test, name="test"),
 ]

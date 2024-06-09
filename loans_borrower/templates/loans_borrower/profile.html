@@ -1,0 +1,17 @@
+{% extends 'navbar/navbar.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h3 class="m-0 font-weight-bold" style="color:#014421">User Profile</h2>
+        <br>
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>First Name:</strong> {{ user.first_name }}</p>
+            <p><strong>Middle Name:</strong> {{ user.middle_name }}</p>
+            <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+            <p><strong>Email Address:</strong> {{ user.email }}</p>
+            <!-- Add more user details as needed -->
+        </div>
+    </div>
+</div>
+{% endblock %}
