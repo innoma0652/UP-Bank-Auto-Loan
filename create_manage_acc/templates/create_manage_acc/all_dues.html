@@ -27,18 +27,18 @@
                 <thead>
                     <tr>
                         <th>User</th>
-                        <th>Amount Due</th>
-                        <th>Due Date</th>
+                        <th>Loan Tag</th>
+                        <th>Loan Balance</th>
                         <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for payment in payments %}
+                    {% for loan in loans %}
                     <tr>
-                        <td>{{ payment.loan.user.username }}</td>
-                        <td>₱ {{ payment.amount_due|intcomma }}</td>
-                        <td>{{ payment.due_date }}</td>
-                        <td>{{ payment.status }}</td>
+                        <td>{{ loan.user.username }}</td>
+                        <td>{{ loan.loan_tag }}</td>
+                        <td>₱{{ loan.loan_bal|intcomma }}</td>
+                        <td>{{ loan.status }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

@@ -15,6 +15,8 @@ import uuid
 from django.shortcuts import get_object_or_404
 from django.db import models
 from django.db import transaction
+from django.contrib import messages
+from django.db.models import F
 
 # Create your views here.
 def account_registration(request):
@@ -117,9 +119,47 @@ def confirmation(request):
 
 def my_dues(request):
     user = request.user
-    payments = Payment.objects.filter(loan__user=user, loan__status='Approved').annotate(month=ExtractMonth('due_date')).values('month').annotate(total_due=models.Sum('amount_due')).order_by('month')
-    return render(request, 'create_manage_acc/my_dues.html', {'payments': payments})
+    loans = Loans.objects.filter(user=user, status='Approved').order_by('-app_date')  # Adjust the filter as necessary
+    return render(request, 'create_manage_acc/my_dues.html', {'loans': loans})
 
 def all_dues(request):
-    payments = Payment.objects.filter(loan__status='Approved').select_related('loan__user').order_by('due_date')
-    return render(request, 'create_manage_acc/all_dues.html', {'payments': payments})
+    loans = Loans.objects.filter(status='Approved').order_by('-app_date')
+    return render(request, 'create_manage_acc/all_dues.html', {'loans': loans})
+
+def pay_due(request, loan_id):
+    loan = get_object_or_404(Loans, pk=loan_id)
+    user = request.user
+    # Fetch the bank account with the highest ID for the user
+    bank_account = BankAccount.objects.filter(user=user).order_by('-id').first()
+    bank_account.refresh_from_db()
+    if not bank_account:
+        messages.error(request, "No bank account found.")
+        return redirect('my_dues')
+
+    if request.method == 'POST':
+        # Calculate the amount to be paid
+        amount_to_pay = min(bank_account.balance, loan.loan_bal)
+
+        # Update bank balance and loan balance
+        print(bank_account.balance, loan.loan_bal)
+        bank_account.balance = F('balance') - amount_to_pay
+        loan.loan_bal = F('loan_bal') - amount_to_pay
+        bank_account.save()
+        loan.save()
+
+        # Refresh from DB to avoid F-expression side effects
+        bank_account.refresh_from_db()
+        loan.refresh_from_db()
+        print(bank_account.balance, loan.loan_bal)
+
+        # Check if the loan is fully paid
+        if loan.loan_bal <= 0:
+            loan.loan_tag = "Completed"
+            loan.save()
+            messages.success(request, "Loan fully paid.")
+        else:
+            messages.success(request, f"Payment of ₱{amount_to_pay} successful. Remaining loan balance: ₱{loan.loan_bal}.")
+
+        return redirect('my_dues')
+
+    return redirect('my_dues')

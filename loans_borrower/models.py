@@ -49,7 +49,7 @@ class Loans(models.Model):
     )
 
     LOAN_TAG = (
-        ('For Review', 'For Review'),
+        ('Pending', 'Pending'),
         ('Delinquent', 'Delinquent'),
         ('In-Loan Default', 'In-Loan Default'),
         ('Completed', 'Completed'),
@@ -118,7 +118,7 @@ class Loans(models.Model):
 
     loan_docs = models.FileField(upload_to='loan_docs/', null=True, blank=True)
     
-    loan_tag = models.CharField(max_length=100, choices=LOAN_TAG, null=True, blank=True)
+    loan_tag = models.CharField(default='Pending', max_length=100, choices=LOAN_TAG, null=True, blank=True)
 
     def __str__(self):
         return "{}, {} - {}".format(self.last_name, self.first_name, self.id)

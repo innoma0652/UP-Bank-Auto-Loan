@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('pay-due/<int:loan_id>/', views.pay_due, name='pay_due'),
+    path('create-account',views.account_registration,name="create-account"),
     path('create-account',views.account_registration,name="create-account"),
     path('deposit-money',views.deposit_money,name="deposit-money"),
     path('deposit/approve/<int:deposit_id>/', views.approve_deposit, name='approve_deposit'),
