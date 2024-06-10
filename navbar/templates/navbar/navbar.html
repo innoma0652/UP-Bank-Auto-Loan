@@ -27,6 +27,9 @@
     <!-- Custom styles for this page -->
     <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 </head>
 
 <body id="page-top">
@@ -78,6 +81,12 @@
                         <i class="fas fa-fw fa-folder"></i>
                         <span>Loan Applications</span></a>
                     </li>
+
+                    <li class="nav-item {% if request.resolver_match.view_name == 'my_dues' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'my_dues' %}">
+                            <i class="fas fa-fw fa-folder"></i>
+                            <span>My Dues</span></a>
+                        </li>
 
                         {% if request.user|has_group:"hasbankaccount" %}
                         <li class="nav-item {% if request.resolver_match.view_name == 'deposit-money' %}active{% endif %}">
@@ -141,7 +150,7 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <i class="fa-solid fa-user"> {{user.username}}</i>
+                        <i class="fa-solid fa-user" onclick="location.href='{% url 'profile' %}'" title="View Profile" style="cursor: pointer;"> {{user.username}}</i>
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
@@ -189,7 +198,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; UPBank 2022</span>
+                        <span>Copyright &copy; UPBank 2024</span>
                     </div>
                 </div>
             </footer>

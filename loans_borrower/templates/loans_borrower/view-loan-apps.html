@@ -2,6 +2,14 @@
 {% load static %}
 {% block content %}
 {% load humanize %}
+
+<Style>
+    .pagination .page-item.active .page-link {
+    background-color: #7B1113 !important; /* Red color for active page */
+    border-color: #7B1113 !important; /* Ensure the border color matches */
+    color: white !important; /* Optional: change text color to white for better visibility */
+}
+</Style>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">

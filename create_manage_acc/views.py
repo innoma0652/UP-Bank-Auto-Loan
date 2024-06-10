@@ -6,10 +6,17 @@ from create_manage_acc.models import BankAccount
 from . import views
 from create_manage_acc.forms import AccountRegForm, BankAccountForm
 from django.contrib.auth.models import Group
-from loans_borrower.models import Loans
+from loans_borrower.models import Loans, Payment
 import datetime
 from django.db.models.functions import ExtractMonth, ExtractYear
 from bank_calculator.views import pmt
+import logging
+import uuid
+from django.shortcuts import get_object_or_404
+from django.db import models
+from django.db import transaction
+from django.contrib import messages
+from django.db.models import F
 
 # Create your views here.
 def account_registration(request):
@@ -46,93 +53,113 @@ def account_registration(request):
     form = AccountRegForm()
     return render(request, 'create_manage_acc/create-acc.html', {'form':form})
 
-def deposit_money(request):
-    if not BankAccount.objects.filter(user = request.user).exists():
-        print("does not exist")
-        form = BankAccountForm()
-        if(request.method == 'POST'):
-            if request.POST.get('balance') is None:
-                
-                form = BankAccountForm({
-                    'user':request.user,
-                    'deposit': request.POST.get('deposit'),
-                    'balance': 0
-                    })
-            if form.is_valid():
-                form.save()
-                return render(request, 'create_manage_acc/deposit-money.html', {'form':form, })
-        return render(request, 'create_manage_acc/deposit-money.html', {'form':form, })        
-    bank_acc = BankAccount.objects.filter(user = request.user).latest('id')
-    bankBal = bank_acc.balance
-    if bankBal is None:
-        bankBal = 0
-    form = BankAccountForm()
-    if(request.method == 'POST'):
-        #bankBal = request.session.get('bankBal')
-        bankBal = float(request.POST.get('deposit')) + float(bankBal)
-        form = BankAccountForm({
-            'user':request.user,
-            'deposit': request.POST.get('deposit'),
-            'balance': bankBal
-            })
-        if form.is_valid():
-            today = datetime.datetime.now()
-            post  = form.save(commit = False)
-            for loan in Loans.objects.exclude(loan_tag="Completed").filter(user = request.user, status="Approved"):
-                #print(loan.app_date.strftime("%m %d"))
-                #print(today.strftime("%m %d"))
-                if(loan.app_date.strftime("%m %d") == today.strftime("%m %d")):
-                        due = True
-                        num_of_months = float(loan.no_of_payments)
-                        loan_amt = float(loan.loan_amt)
-                        if loan.loan_bal is None:
-                            loan_bal = 0
-                        else:
-                            loan_bal = float(loan.loan_bal)
-                        percentage = 0.0525
-                        monthly_pmt = pmt(percentage, loan_amt, num_of_months)
-                        monthly_pmt = float(monthly_pmt)
-                        print("Monthly PMT")
-                        print(monthly_pmt)
-                        print("loan balance: ")
-                        print(loan_bal)
-                        monthly_pmt = float(monthly_pmt)
-                        if loan.loan_bal is None:
-                            loan_bal = 0
-                        else:
-                            loan_bal = float(loan.loan_bal)
-                        # print(bankBal)
-                        float(bankBal)
-                        bankBal -= monthly_pmt
-                        loan_bal -= monthly_pmt
-                        loan.loan_bal = "{:.2f}".format(loan_bal)
-                        print("bank balance:")
-                        print(bankBal)
-                        if bankBal < monthly_pmt:
-                            loan.loan_tag = "Delinquent"
-                            # BankAccount.objects.filter(user=request.user).delete()
-                            # print("Bank account deleted")
-                            # user = request.user
-                            # group = Group.objects.get(name='hasbankaccount') 
-                            # user.groups.remove(group)
-                            return render(request, 'create_manage_acc/over-the-counter.html')
-                        if(float(loan.loan_bal) <= 0):
-                            loan.loan_tag = "Completed"
-                        loan.save()
-                        bankBal = "{:.2f}".format(bankBal)
-                        print("new loan bal:")
-                        print(loan.loan_bal)
-                        print("bank balance:")
-                        print(bankBal)
-            post.balance = bankBal
-            #print(form.balance)
-            post.save()
-            form = BankAccountForm({
-            'user':request.user,
-            'deposit': request.POST.get('deposit'),
-            'balance': post.balance
-            })
-            return render(request, 'create_manage_acc/deposit-money.html', {'form':form, 'bank_bal': bankBal})
+def generate_deposit_id():
+    return uuid.uuid4().hex
 
-    form = BankAccountForm()
-    return render(request, 'create_manage_acc/deposit-money.html', {'form':form, 'bank_bal': bankBal})
+def deposit_money(request):
+    logger = logging.getLogger(__name__)
+    form = BankAccountForm(request.POST or None)
+    try:
+        bank_acc = BankAccount.objects.filter(user=request.user).latest('id')
+        bank_bal = float(bank_acc.balance)
+        deposit_amount = float(bank_acc.deposit)
+    except BankAccount.DoesNotExist:
+        print("No bank account found for the user.")
+        bank_bal = 0  # Default balance if no account exists
+    print(bank_bal, deposit_amount, bank_bal+deposit_amount)
+    if request.method == 'POST':
+        if form.is_valid():
+            deposit = form.save(commit=False)
+            deposit.user = request.user
+            deposit.deposit_id = generate_deposit_id()  # Assuming you have a function to generate this
+            deposit.status = 'Pending'
+            deposit.balance = Decimal(bank_bal)
+            deposit.save()
+            print(deposit.reference_number, deposit.id, deposit.deposit_id, deposit.balance+deposit.deposit)
+            print(f"Deposit saved with ID {deposit.id}")
+            return render(request, 'create_manage_acc/confirmation.html', {'deposit': deposit_amount, 'form': form, 'bank_bal': bank_bal})
+        else:
+            logger.error("Form is not valid")
+            logger.error(form.errors)
+
+    return render(request, 'create_manage_acc/deposit-money.html', {'deposit': deposit_amount, 'form': form, 'bank_bal': bank_bal})
+
+def js_redirect(request):
+    context = {'redirect_url': 'confirmation/'}
+    return render(request, 'create_manage_acc/confirmation.html', context)
+
+def approve_deposit(request, deposit_id):
+    with transaction.atomic():
+        deposit = BankAccount.objects.select_for_update().get(pk=deposit_id)
+        user = deposit.user
+        if deposit.status != 'Approved':
+            print(f"Current balance before approval: {user} {deposit.balance}")
+            print(f"Deposit amount being approved: {deposit.deposit}")
+            deposit.status = 'Approved'
+            newbal = deposit.balance + deposit.deposit
+            deposit.balance = newbal
+            deposit.save()
+            print(f"New balance after approval: {user} {deposit.balance}")
+    deposit.save()
+    return redirect('view_deposit_applications')
+
+def reject_deposit(request, deposit_id):
+    deposit = get_object_or_404(BankAccount, pk=deposit_id)
+    deposit.status = 'Rejected'
+    deposit.save()
+    return redirect('view_deposit_applications')
+
+def view_deposit_applications(request):
+    deposits = BankAccount.objects.filter(status='Pending').order_by('-id')
+    print(deposits)  # Debug: Print deposits to check
+    return render(request, 'create_manage_acc/deposit_applications.html', {'deposits': deposits})
+
+def confirmation(request):
+    return render(request, 'create_manage_acc/confirmation.html')
+
+def my_dues(request):
+    user = request.user
+    loans = Loans.objects.filter(user=user, status='Approved').order_by('-app_date')  # Adjust the filter as necessary
+    return render(request, 'create_manage_acc/my_dues.html', {'loans': loans})
+
+def all_dues(request):
+    loans = Loans.objects.filter(status='Approved').order_by('-app_date')
+    return render(request, 'create_manage_acc/all_dues.html', {'loans': loans})
+
+def pay_due(request, loan_id):
+    loan = get_object_or_404(Loans, pk=loan_id)
+    user = request.user
+    # Fetch the bank account with the highest ID for the user
+    bank_account = BankAccount.objects.filter(user=user).order_by('-id').first()
+    bank_account.refresh_from_db()
+    if not bank_account:
+        messages.error(request, "No bank account found.")
+        return redirect('my_dues')
+
+    if request.method == 'POST':
+        # Calculate the amount to be paid
+        amount_to_pay = min(bank_account.balance, loan.loan_bal)
+
+        # Update bank balance and loan balance
+        print(bank_account.balance, loan.loan_bal)
+        bank_account.balance = F('balance') - amount_to_pay
+        loan.loan_bal = F('loan_bal') - amount_to_pay
+        bank_account.save()
+        loan.save()
+
+        # Refresh from DB to avoid F-expression side effects
+        bank_account.refresh_from_db()
+        loan.refresh_from_db()
+        print(bank_account.balance, loan.loan_bal)
+
+        # Check if the loan is fully paid
+        if loan.loan_bal <= 0:
+            loan.loan_tag = "Completed"
+            loan.save()
+            messages.success(request, "Loan fully paid.")
+        else:
+            messages.success(request, f"Payment of ₱{amount_to_pay} successful. Remaining loan balance: ₱{loan.loan_bal}.")
+
+        return redirect('my_dues')
+
+    return redirect('my_dues')

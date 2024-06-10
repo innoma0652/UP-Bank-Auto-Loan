@@ -9,6 +9,7 @@ import os
 from xhtml2pdf import pisa
 from django.http import HttpResponse
 from django.views.generic import View
+from create_manage_acc.models import BankAccount
 
 # Create your views here.
 def dashboard (request):
@@ -70,7 +71,12 @@ def reject_loan_app(request,pk):
     }
     return redirect ('review')
 
-    
+def loaner_status(request):
+    loans = Loans.objects.filter()
+    data = {
+        'loans' : loans,
+    }
+    return render(request, 'bank_officer/loaner-status.html', data) 
 
 # Generate Loan App to PDF
 def fetch_resources(uri, rel):
@@ -97,8 +103,11 @@ class GeneratePDF(View):
         }
         pdf = render_to_pdf('bank_officer/loan-pdf.html', data)
         return HttpResponse(pdf, content_type='application/pdf')
+    
+def view_deposit_applications(request):
+    deposits = BankAccount.objects.filter(status='Pending')  # Adjust this query as needed
+    return render(request, 'create_manage_acc/deposit_applications.html', {'deposits': deposits})
 
 def logout_page(request):
     logout(request)
-    print("it worked until here tho")
     return redirect("/auth/logout")

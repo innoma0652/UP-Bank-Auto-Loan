@@ -1,0 +1,49 @@
+{% extends 'bank_officer/navbar.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<style>
+    .table-responsive table {
+        color: #343434;
+    }
+
+    .table-responsive input[type="text"] {
+        color: #343434;
+    }
+
+    .button-width {
+        width: 150px;
+    }
+</style>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h3 class="m-0 font-weight-bold" style="color:#00573f">All Dues</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered text-gray-900" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Loan Tag</th>
+                        <th>Loan Balance</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for loan in loans %}
+                    <tr>
+                        <td>{{ loan.user.username }}</td>
+                        <td>{{ loan.loan_tag }}</td>
+                        <td>₱{{ loan.loan_bal|intcomma }}</td>
+                        <td>{{ loan.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

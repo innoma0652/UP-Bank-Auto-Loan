@@ -28,6 +28,13 @@
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 
+    <style>
+        #accordionSidebar .collapse-item.active {
+            color: #F3AA2C !important;
+            background-color: transparent !important;
+        }
+    </style>
+
 </head>
 
 <body id="page-top">
@@ -36,7 +43,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" style="background:#8b1538" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" style="background:#7b1113" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
@@ -77,6 +84,28 @@
                         <a class="collapse-item {% if request.resolver_match.view_name == 'rejected' %}active{% endif %}" href="{% url 'rejected' %}">Rejected Loans</a>
                     </div>
                 </div>
+            </li>
+
+            <li class="nav-item {% if request.resolver_match.view_name == 'all_dues' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'all_dues' %}">
+                    <i class="fas fa-fw fa-money-bill-wave"></i>
+                    <span>All Dues</span>
+                </a>
+            </li>
+
+            <li class="nav-item {% if request.resolver_match.view_name == 'loaner-status' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'loaner-status' %}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Loaner Status</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Deposit Applications -->
+            <li class="nav-item {% if request.resolver_match.view_name == 'view_deposit_applications' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'view_deposit_applications' %}">
+                    <i class="fas fa-fw fa-university"></i>
+                    <span>View Deposits</span>
+                </a>
             </li>
 
             <!-- Divider -->
@@ -164,7 +193,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; UPBank 2022</span>
+                        <span>Copyright &copy; UPBank 2024</span>
                     </div>
                 </div>
             </footer>

@@ -4,6 +4,15 @@
     .business, .employee, #labelH, #labelM, #mobile_num, #home_num{
         visibility: collapse;
     }
+    .text-dark-gray {
+    color: #343434;
+    }
+    .text-white {
+        color: white;
+    }
+    .maroon-background {
+        background-color: #7B1113 !important;
+    }
 </style>
 {% if messages %}
     {% for message in messages %}
@@ -26,7 +35,7 @@
         {% endif %}
     {% endfor %}  
 {% endif %}
-<h1 class="h3 mb-2" style="color:#00573f">Loan Application</h1>
+<h1 class="h3 mb-2 font-weight-bold" style="color:#00573f !important;">Loan Application</h1>
 <div class="card shadow mb-4">
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -40,156 +49,162 @@
             <div class="row">
                 <table class="table table-bordered">
                     <tr>
-                        <th class="table-warning" colspan="9" ><b>VEHICLE INFORMATION</b></th>
+                        <th class="table-warning text-white maroon-background" colspan="9" ><b>VEHICLE INFORMATION</b></th>
                     </tr>
                     <tr>
-                        <td class="table-light" colspan="1"><b>Manufacturer:</b><span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="2">{{loan_form.make}}</td>
-                        <td class="table-light" colspan="1"><b>Model:</b><span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="2">{{loan_form.model}}</td>
-                        <td class="table-light" colspan="1"><b>Selling Price:</b><span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="2">{{loan_form.sell_price}}</td>
+                        <td class="table-light text-dark-gray" colspan="1"><b>Manufacturer:</b><span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="2">{{loan_form.make}}</td>
+                        <td class="table-light text-dark-gray" colspan="1"><b>Model:</b><span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="2">{{loan_form.model}}</td>
+                        <td class="table-light text-dark-gray" colspan="1"><b>Selling Price:</b><span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="2">{{loan_form.sell_price}}</td>
                     </tr>
                     <tr>
-                        <td class="table-light"colspan="1" style="font-weight:bold ;">Downpayment Percentage:<span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="2" onchange="show()">{{loan_form.dp_percent}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Downpayment Amount:<span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="2" onchange="show_dpAmt()">{{loan_form.dp_amt}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Loan Amount:<span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="2">{{loan_form.loan_amt}}</td>
+                        <td class="table-light text-dark-gray"colspan="1" style="font-weight:bold ;">Downpayment Percentage:<span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="2" onchange="show()">{{loan_form.dp_percent}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Downpayment Amount:<span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="2" onchange="show_dpAmt()">{{loan_form.dp_amt}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Loan Amount:<span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="2">{{loan_form.loan_amt}}</td>
                     </tr>
                     <tr>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Number of Payments:<span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="1">{{loan_form.no_of_payments}}</td>
-                    </tr>
-                </table>
-                <table class="table table-bordered">
-                    <tr>
-                        <th class="table-warning" colspan="6"><b>BORROWER INFORMATION</b></th>
-                    </tr>
-                    <tr>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">First Name:<span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="1">{{loan_form.first_name}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Middle Name:</td>
-                        <td class="table-light" colspan="1">{{loan_form.middle_name}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Last Name:<span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="1">{{loan_form.last_name}}</td>
-                    </tr>
-                    <tr>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Birth Date:<span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="1">{{loan_form.birthdate}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Civil Status:<span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="1">{{loan_form.civ_status}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Home Ownership<span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="1">{{loan_form.home_own}}</td>
-                    </tr>
-                    <tr>
-                        <td class="table-light"colspan="1" style="font-weight:bold ;">Length of Stay:<span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="1">{{loan_form.len_stay_num}}{{loan_form.len_stay}}</td>
-                    </tr>
-                    <tr>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Home Address:<span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="1">{{loan_form.unit_no}}</td>
-                        <td class="table-light" colspan="2">{{loan_form.condo_name}}</td>
-                        <td class="table-light" colspan="2">{{loan_form.street}}</td>
-                    </tr>
-                    <tr>
-                        <td class="table-light" colspan="1">{{loan_form.subdiv_brgy}}</td>
-                        <td class="table-light" colspan="1">{{loan_form.city}}</td>
-                        <td class="table-light" colspan="2">{{loan_form.municip_prov}}</td>
-                        <td class="table-light" colspan="2">{{loan_form.country}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Number of Payments:<span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.no_of_payments}}</td>
                     </tr>
                 </table>
                 <table class="table table-bordered">
                     <tr>
-                        <th class="table-warning" colspan="8"><b>CONTACT INFORMATION</b></th>
+                        <th class="table-warning text-white maroon-background" colspan="6"><b>BORROWER INFORMATION</b></th>
                     </tr>
                     <tr>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Phone Type:<span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="1" onchange="swap()" >{{loan_form.phone_type}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Email Address:<span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="1">{{loan_form.email_add}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">First Name:<span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="1">
+                            <input type="text" name="first_name" value="{{ user.first_name }}" readonly>
+                        </td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Middle Name:</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.middle_name}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Last Name:<span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="1">
+                            <input type="text" name="last_name" value="{{ user.last_name }}" readonly>
+                        </td>
                     </tr>
                     <tr>
-                        <td class="table-light" colspan="1" id="labelH" style="font-weight:bold ;">Home Number: </td>
-                        <td class="table-light" colspan="1">{{loan_form.home_num}}</td>
-                        <td class="table-light" colspan="1" id="labelM" style="font-weight:bold ;">Mobile Number:</td>
-                        <td class="table-light" colspan="1">{{loan_form.mobile_num}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Birth Date:<span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.birthdate}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Civil Status:<span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.civ_status}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Home Ownership<span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.home_own}}</td>
+                    </tr>
+                    <tr>
+                        <td class="table-light text-dark-gray"colspan="1" style="font-weight:bold ;">Length of Stay:<span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.len_stay_num}}{{loan_form.len_stay}}</td>
+                    </tr>
+                    <tr>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Home Address:<span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.unit_no}}</td>
+                        <td class="table-light text-dark-gray" colspan="2">{{loan_form.condo_name}}</td>
+                        <td class="table-light text-dark-gray" colspan="2">{{loan_form.street}}</td>
+                    </tr>
+                    <tr>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.subdiv_brgy}}</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.city}}</td>
+                        <td class="table-light text-dark-gray" colspan="2">{{loan_form.municip_prov}}</td>
+                        <td class="table-light text-dark-gray" colspan="2">{{loan_form.country}}</td>
                     </tr>
                 </table>
                 <table class="table table-bordered">
                     <tr>
-                        <th class="table-warning" colspan="6"><b>EMPLOYMENT/BUSINESS INFORMATION</b></th>
+                        <th class="table-warning text-white maroon-background" colspan="8"><b>CONTACT INFORMATION</b></th>
                     </tr>
                     <tr>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Primary Source of Income<span style="color: red;">*</span></td>
-                        <td class="table-light" colspan="1" onchange="pop()">{{loan_form.prime_income}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Phone Type:<span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="1" onchange="swap()" >{{loan_form.phone_type}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Email Address:<span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="1">
+                            <input type="text" name="email_add" value="{{ user.email }}" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table-light text-dark-gray" colspan="1" id="labelH" style="font-weight:bold ;">Home Number: </td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.home_num}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" id="labelM" style="font-weight:bold ;">Mobile Number:</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.mobile_num}}</td>
+                    </tr>
+                </table>
+                <table class="table table-bordered">
+                    <tr>
+                        <th class="table-warning text-white maroon-background" colspan="6"><b>EMPLOYMENT/BUSINESS INFORMATION</b></th>
+                    </tr>
+                    <tr>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Primary Source of Income<span style="color: red;">*</span></td>
+                        <td class="table-light text-dark-gray" colspan="1" onchange="pop()">{{loan_form.prime_income}}</td>
                     </tr>
                     <tr class="employee">
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Employment Type</td>
-                        <td class="table-light" colspan="1">{{loan_form.emp_type}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Employer's Name</td>
-                        <td class="table-light" colspan="1">{{loan_form.emp_name}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Position</td>
-                        <td class="table-light" colspan="1">{{loan_form.job_pos}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Employment Type</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.emp_type}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Employer's Name</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.emp_name}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Position</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.job_pos}}</td>
                     </tr>
                     <tr class="employee">
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Tenure</td>
-                        <td class="table-light" colspan="1">{{loan_form.emp_tenure_num}}{{loan_form.emp_tenure}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Monthly Income</td>
-                        <td class="table-light" colspan="1">{{loan_form.emp_monthly_income}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Employee No.</td>
-                        <td class="table-light" colspan="1">{{loan_form.emp_work_no}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Tenure</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.emp_tenure_num}}{{loan_form.emp_tenure}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Monthly Income</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.emp_monthly_income}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Employee No.</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.emp_work_no}}</td>
                     </tr>
                     <tr class="business">
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Business Type</td>
-                        <td class="table-light" colspan="1">{{loan_form.bsns_type}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Business Name</td>
-                        <td class="table-light" colspan="1">{{loan_form.bsns_name}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Tenure</td>
-                        <td class="table-light" colspan="1">{{loan_form.bsns_tenure}}{{loan_form.bsns_tenure_num}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Business Type</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.bsns_type}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Business Name</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.bsns_name}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Tenure</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.bsns_tenure}}{{loan_form.bsns_tenure_num}}</td>
                     </tr>
                     <tr class="business">
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Monthly Income</td>
-                        <td class="table-light" colspan="1">{{loan_form.bsns_monthly_income}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Business no.</td>
-                        <td class="table-light" colspan="1">{{loan_form.bsns_work_no}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Monthly Income</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.bsns_monthly_income}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Business no.</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.bsns_work_no}}</td>
                     </tr>
                 </table>
                 <table class="table table-bordered business">
                     <tr>
-                        <th class="table-warning" colspan="8"><b>BUSINESS ADDRESS</b></th>
+                        <th class="table-warning text-white maroon-background" colspan="8"><b>BUSINESS ADDRESS</b></th>
                     </tr>
                     <tr>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Unit no.</td>
-                        <td class="table-light" colspan="1">{{loan_form.bsns_unit_no}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Condominium Name</td>
-                        <td class="table-light" colspan="2">{{loan_form.bsns_condo_name}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Street</td>
-                        <td class="table-light" colspan="2">{{loan_form.bsns_street}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Unit no.</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.bsns_unit_no}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Condominium Name</td>
+                        <td class="table-light text-dark-gray" colspan="2">{{loan_form.bsns_condo_name}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Street</td>
+                        <td class="table-light text-dark-gray" colspan="2">{{loan_form.bsns_street}}</td>
                     </tr>
                     <tr>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Subdivision/Barangay</td>
-                        <td class="table-light" colspan="1">{{loan_form.bsns_subdiv_brgy}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">City</td>
-                        <td class="table-light" colspan="1">{{loan_form.bsns_city}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Municipality/Province</td>
-                        <td class="table-light" colspan="1">{{loan_form.bsns_municip_prov}}</td>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Country</td>
-                        <td class="table-light" colspan="1">{{loan_form.bsns_country}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Subdivision/Barangay</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.bsns_subdiv_brgy}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">City</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.bsns_city}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Municipality/Province</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.bsns_municip_prov}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Country</td>
+                        <td class="table-light text-dark-gray" colspan="1">{{loan_form.bsns_country}}</td>
                     </tr>
                 </table>
                 <table class="table table-bordered">
                     <tr>
-                        <th class="table-warning" colspan="9"><b>UPLOAD LOAN DOCUMENTS</b></th>
+                        <th class="table-warning text-white maroon-background" colspan="9"><b>UPLOAD LOAN DOCUMENTS</b></th>
                     </tr>
                     <tr>
-                        <td class="table-light" colspan="1" style="font-weight:bold ;">Loan Documents (.zip):</td>
-                        <td class="table-light" colspan="2">{{loan_form.loan_docs}}</td>
+                        <td class="table-light text-dark-gray" colspan="1" style="font-weight:bold ;">Loan Documents (.zip):</td>
+                        <td class="table-light text-dark-gray" colspan="2">{{loan_form.loan_docs}}</td>
                     </tr>
                 </table>
             </div>
-            <button type="submit" class="btn btn-success">Submit</button>
+            <button type="submit" class="btn btn-success" style="background-color: #00573f !important; border-color: #00573f;">Submit</button>
         </div>
     </form>
 </div>

@@ -59,12 +59,12 @@ class AccountRegForm(ModelForm):
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Address', 'aria-label': 'Address', 'required': True}),
         }
 
-class BankAccountForm(ModelForm):
+class BankAccountForm(forms.ModelForm):
     class Meta:
         model = BankAccount
-        fields = '__all__'
+        exclude = ['user', 'deposit_id', 'status']
+        fields = ['deposit', 'balance', 'reference_number']
         widgets = {
-            'user':  HiddenInput(attrs={'type': 'hidden'}),
-            'balance' : forms.NumberInput(attrs={'required': False, 'disabled': True}),
-            'deposit': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Amount'}),
+            'deposit': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter deposit amount'}),
+            'reference_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter reference number'}),
         }
