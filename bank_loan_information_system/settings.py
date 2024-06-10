@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-eo5w=d1i%okd-size%b^d)58o5f4)s9a@)#2&t30-09z0iz+^2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'bank-loan-system.herokuapp.com']
+ALLOWED_HOSTS = ['up-bank-auto-loan.onrender.com']
 
 
 # Application definition
